@@ -19,7 +19,7 @@ def preprocess_df(df_test, user_stats, city_stats):
     create_population_features(df_test)
     create_post_code_features(df_test)
     apply_city_features(df_test, city_stats)
-    df_test.drop(columns=['transaction_time', 'merchant_lat', 'merchant_lon', 'lat', 'lon', 'post_code', 'street'],
+    df_test.drop(columns=['transaction_time', 'merchant_lat', 'merchant_lon', 'lat', 'lon', 'post_code', 'street', 'city_freq_log'],
                  inplace=True)
     return df_test
 
@@ -28,12 +28,12 @@ def get_pred_probs(model, df_test):
     return model.predict_proba(df_test)[:, 1]
 
 
-def get_predictions(y_test_proba, path):
+def get_predictions(y_test_proba, path, output):
     df_test_predict = pd.DataFrame(y_test_proba, columns=["prediction"]).reset_index()
     df_test_predict["prediction"] = df_test_predict["prediction"].apply(
         lambda x: 1 if x >= THRESHOLD else 0
     )
-    df_test_predict.to_csv(f'predict_{path.name}', index=False)
+    df_test_predict.to_csv(output + f'//predict_{path.name}', index=False)
 
 
 def get_topn_feature_importance(model, df_test, output, n=5):

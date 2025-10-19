@@ -71,12 +71,10 @@ class InferenceService(FileSystemEventHandler):
             y_test_proba = get_pred_probs(self.model, test)
             logger.info(f'{path} Successfully predicted probs')
             if self.additional_model_info:
-                logger.info(f'{len(test.columns())}')
-                logger.info(f'{len(self.model.get_feature_importance())}')
                 get_topn_feature_importance(self.model, test, str(self.output_dir), n=self.top_n)
                 get_predict_density_distribution(y_test_proba, str(self.output_dir))
                 logger.info(f'{path} Additional Predict info successfully saved')
-            get_predictions(y_test_proba, path)
+            get_predictions(y_test_proba, path, str(self.output_dir))
             logger.info(f'{path} Predictions saved to predict_{path.name}')
         except Exception as e:
             logger.error(f'Error processing file {path}: {e}', exc_info=True)
