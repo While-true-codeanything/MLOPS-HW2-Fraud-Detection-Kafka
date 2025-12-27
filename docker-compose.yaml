@@ -44,20 +44,22 @@ services:
     networks:
       - ml-fraud-detection-scorer
     restart: on-failure
-    entrypoint: [ "/bin/bash", "-c" ]
-    command: |
-      "
-      echo 'Ожидание готовности Kafka...'
-      while ! kafka-topics --bootstrap-server kafka:9092 --list; do
-        sleep 1
-      done
+    command:
+      - bash
+      - -lc
+      - |
+        echo "Waiting Kafka..."
+        until kafka-topics --bootstrap-server kafka:9092 --list >/dev/null 2>&1; do
+          sleep 1
+        done
 
-      echo 'Создание топиков...'
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic transactions --partitions 3 --replication-factor 1 --config retention.ms=604800000
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic scoring --partitions 3 --replication-factor 1 --config retention.ms=604800000
+        echo "Creating topics..."
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic transactions --partitions 3 --replication-factor 1 --config retention.ms=604800000
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic scoring --partitions 3 --replication-factor 1 --config retention.ms=604800000
 
-      echo 'Топики успешно созданы:'
-      kafka-topics --bootstrap-server kafka:9092 --list
+        echo "Topics:"
+        kafka-topics --bootstrap-server kafka:9092 --list
+
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
