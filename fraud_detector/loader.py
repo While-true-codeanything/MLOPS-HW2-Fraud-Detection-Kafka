@@ -2,9 +2,9 @@ import pandas as pd
 from catboost import CatBoostClassifier
 
 
-def load_test(path):
-    df_test = pd.read_csv(f"{path}//test.csv")
-    return df_test
+#def load_test(path):
+# df_test = pd.read_csv(f"{path}//test.csv")
+#   return df_test
 
 
 def load_model(path):

@@ -4,4 +4,4 @@ numpy
 scikit-learn
 catboost
 geopy
-watchdog
+confluent-kafka

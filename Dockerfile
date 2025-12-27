@@ -16,4 +16,4 @@ COPY weights/ ./weights/
 VOLUME /app/input
 VOLUME /app/output
 
-CMD ["python", "./fraud_detector/app.py"]
+CMD ["python", "-m", "fraud_detector.app"]
