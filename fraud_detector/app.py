@@ -7,7 +7,7 @@ import json
 import pandas as pd
 from confluent_kafka import Consumer, Producer
 
-from fraud_detector.loader import load_model, load_stats
+from fraud_detector.loader import load_model, load_stats, get_pred_probs
 from fraud_detector.scripts import preprocess_df, get_score_from_proba
 
 
