@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from preprocessing import apply_agg_features, create_time_features, create_distance_features, \
+from fraud_detector.preprocessing import apply_agg_features, create_time_features, create_distance_features, \
     create_amount_features, create_merch_jobs_features, create_population_features, create_post_code_features, \
     apply_city_features
 
