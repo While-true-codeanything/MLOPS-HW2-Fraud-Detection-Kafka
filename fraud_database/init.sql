@@ -1,0 +1,6 @@
+CREATE TABLE transactions (
+    id TEXT PRIMARY KEY,
+    score DOUBLE PRECISION NOT NULL,
+    fraud_flag SMALLINT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

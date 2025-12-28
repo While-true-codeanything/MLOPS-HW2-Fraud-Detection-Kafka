@@ -67,7 +67,7 @@ class KafkaFraudService:
         self.producer = Producer({'bootstrap.servers': args.bootstrap_servers})
         logger.info(f"Consumer and Producer successfully initialized to: {args.transactions_topic}")
 
-    def parse_message(self, msg_value: bytes):
+    def parse_message(self, msg_value):
         data = json.loads(msg_value.decode('utf-8'))
         return data['transaction_id'], pd.DataFrame([data['data']])
 

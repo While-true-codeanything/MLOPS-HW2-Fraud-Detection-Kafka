@@ -75,7 +75,9 @@ services:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
   fraud_detector:
-    build: .
+    build:
+      context: .
+      dockerfile: fraud_detector/Dockerfile
     networks:
       - ml-fraud-detection-scorer
     environment:
@@ -102,6 +104,46 @@ services:
       - kafka
       - kafka-setup
     command: ["python", "./fraud_detector/producer.py"]
+
+  postgres:
+    image: postgres:16
+    networks:
+      - ml-fraud-detection-scorer
+    environment:
+      POSTGRES_DB: fraud_scores
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d password"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  database_logger:
+    build:
+      context: .
+      dockerfile: database_logger/Dockerfile
+    networks:
+      - ml-fraud-detection-scorer
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+      KAFKA_SCORES_TOPIC: "scoring"
+
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      kafka-setup:
+        condition: service_started
 
 networks:
   ml-fraud-detection-scorer:
