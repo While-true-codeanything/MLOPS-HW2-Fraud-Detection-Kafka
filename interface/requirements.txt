@@ -1,0 +1,6 @@
+pandas
+confluent-kafka
+streamlit==1.45.0
+matplotlib
+psycopg2-binary
+numpy

@@ -72,6 +72,19 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
+  interface:
+    build:
+      context: .
+      dockerfile: interface/Dockerfile
+    networks:
+      - ml-fraud-detection-scorer
+    environment:
+      KAFKA_BROKERS: "kafka:9092"
+    depends_on:
+      - kafka
+    ports:
+      - "8501:8501"
+
   fraud_detector:
     build:
       context: .
@@ -86,22 +99,6 @@ services:
     depends_on:
       - kafka
       - kafka-setup
-
-  producer:
-    build:
-      context: .
-      dockerfile: fraud_detector/Dockerfile
-    networks:
-      - ml-fraud-detection-scorer
-    environment:
-      KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
-      KAFKA_TRANSACTIONS_TOPIC: "transactions"
-    volumes:
-      - ./input:/app/input
-    depends_on:
-      - kafka
-      - kafka-setup
-    command: ["python", "./fraud_detector/producer.py"]
 
   postgres:
     image: postgres:16
