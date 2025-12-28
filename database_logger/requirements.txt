@@ -1,2 +1,2 @@
 confluent-kafka
-psycopg2
+psycopg2-binary

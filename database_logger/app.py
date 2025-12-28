@@ -65,7 +65,7 @@ class KafkaScoresToPostgresService:
         zpr = """
                 INSERT INTO transactions (id, score, fraud_flag)
                 VALUES (%s, %s, %s)
-                ON CONFLICT (transaction_id) DO NOTHING
+                ON CONFLICT (id) DO NOTHING
                 """
         self.cursor.execute(zpr, row)
 
