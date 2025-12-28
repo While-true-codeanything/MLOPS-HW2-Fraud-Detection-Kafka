@@ -147,3 +147,6 @@ networks:
   ml-fraud-detection-scorer:
     name: ml-fraud-detection-scorer
     driver: bridge
+
+volumes:
+  pg_data:
